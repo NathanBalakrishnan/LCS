@@ -5,9 +5,19 @@
     font-size: 18px;
 }
 .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link{
-   background: #ffffff;
+   background: #ebf9f9ff;
    border-color:#008B8B;
    border-bottom: 4px solid #008B8B;
+}
+.p-tabview .p-tabview-nav .p-tabview-nav-link {
+   background: #ebf9f9ff !important;
+}
+.p-tabview .p-tabview-panels {
+    background: #ebf9f9ff !important; /* content area background */
+}
+.p-tabview .p-tabview-nav {
+    background: #ebf9f9ff !important; /* full white for tab header area */
+    border-bottom: 1px solid #ccc; /* optional: subtle border */
 }
 .dataTable{
     font-size: 12px;
