@@ -59,7 +59,6 @@ useEffect(() => {
     padding: "4px",
     borderRadius: "15px",
   };
-
   const formatMonth = (value) => {
     const date = new Date(value + "-01");
     return date.toLocaleString("en-US", { month: "short", year: "numeric" });
@@ -147,7 +146,6 @@ useEffect(() => {
                 justifyContent: "center",
               }}
             >
-              {/* 👁 View Button */}
               <Button
                 icon="pi pi-eye"
                 className="p-button-white p-button-sm bg-white"
@@ -162,8 +160,6 @@ useEffect(() => {
                   setVisible(true);
                 }}
               />
-
-              {/* ✏️ Edit Button */}
               <Button
                 icon="pi pi-pencil"
                 className="p-button-white p-button-sm bg-white"
@@ -250,10 +246,10 @@ useEffect(() => {
           ></div>
           <div>
             {managingPoints.length > 0 &&
-              goal?.code === "Managing Point" &&
+              (goal?.code === undefined || goal?.code === "Managing Point") &&
               renderTable("Managing Points", managingPoints)}
             {checkingPoints.length > 0 &&
-              (goal?.code === "Managing Point" ||
+              (goal?.code === "Managing Point" || goal?.code === undefined ||
                 goal?.code === "Checking Point") &&
               renderTable("Checking Points", checkingPoints)}
           </div>
