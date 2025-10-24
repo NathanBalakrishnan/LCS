@@ -8,16 +8,20 @@ import { Dropdown } from "primereact/dropdown";
 import DialogForm from "../Common/DailogForm.js";
 import MonthScorePicker from "../Common/DateComponent.js";
 import { formatMonthString } from "../Utils/Utilityfunction.js";
+import monthScores from "../../Mocks/MonthMock.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
 
   const totalTarget = products.reduce((val, item) => val + item.target, 0);
   const totalActual = products.reduce((val, item) => val + item.actual, 0);
-  const averagePercentage = (totalActual / totalTarget) * 100;
+  let averagePercentage = totalTarget
+  ? Math.round((totalActual / totalTarget) * 100)
+  : 0;
+  averagePercentage = averagePercentage > 100 ? 100 : averagePercentage;
 
   const [jobName, setJobName] = useState(null);
   const [showGrid, setShowGrid] = useState(false);
-  console.log("jobName",jobName)
+  console.log("jobName", jobName);
   const handleMonthClick = () => {
     // Toggle your custom grid when clicking input
     setShowGrid(!showGrid);
@@ -39,20 +43,6 @@ export default function ScoreCardAmendment() {
       setProducts(filteredData);
     }
   }, [date]);
-  const monthScores = {
-    "2025-01": { score: 90, tag: "ME" },
-    "2025-02": { score: 85 },
-    "2025-03": { score: 98 },
-    "2025-04": { score: 95 },
-    "2025-05": { score: 90 },
-    "2025-06": { score: 85 },
-    "2025-07": { score: 90, tag: "ME" },
-    "2025-08": { score: 95 },
-    "2025-09": { score: 88 },
-    "2025-10": { score: 85 },
-    "2025-11": { score: 55, tag: "BE" },
-    "2025-12": { score: 95 },
-  };
   const JobTitle = [
     { name: "FrontEnd Developer", code: "FrontEnd Developer" },
     { name: "BackEnd Developer", code: "BackEnd Developer" },
@@ -104,7 +94,12 @@ export default function ScoreCardAmendment() {
                 style={{ width: "100%", minWidth: "250px" }}
               />
             </div>
-            <div style={{ opacity: jobName ? 1 : 0.5, pointerEvents: jobName ? "auto" : "none" }}>
+            <div
+              style={{
+                opacity: jobName ? 1 : 0.5,
+                pointerEvents: jobName ? "auto" : "none",
+              }}
+              >
               <MonthScorePicker
                 monthScores={monthScores}
                 formatMonth={formatMonth}
@@ -158,27 +153,28 @@ export default function ScoreCardAmendment() {
               </h3>
             </div>
           </div>
-          
           <DataTable
             value={products}
             tableStyle={{ minWidth: "50rem" }}
             className="dataTable"
+            paginator 
+            rows={3}
           >
             <Column
               field="id"
-              header="Object Id"
+              header="Obj-Id"
               sortable
               style={{ width: "25%" }}
             ></Column>
             <Column
               field="accountability"
-              header="Accountability"
+              header="Account"
               sortable
               style={{ width: "25%" }}
             ></Column>
             <Column
               field="measureDescription"
-              header="Measure Description"
+              header="Des"
               sortable
               style={{ width: "25%" }}
             ></Column>
@@ -196,13 +192,13 @@ export default function ScoreCardAmendment() {
             ></Column>
             <Column
               field="jobAssignment"
-              header="Job Assignment"
+              header="Job Assgn"
               sortable
               style={{ width: "25%" }}
             ></Column>
             <Column
               field="periodicity"
-              header="Periodicity"
+              header="Period"
               sortable
               style={{ width: "25%" }}
             ></Column>
@@ -220,7 +216,7 @@ export default function ScoreCardAmendment() {
             ></Column>
             <Column
               field="perfScore"
-              header="Perf.Score"
+              header="Perf.Scr"
               sortable
               style={{ width: "25%" }}
               body={(rowData) => {
@@ -243,13 +239,13 @@ export default function ScoreCardAmendment() {
                 const targetValue = Number(rowData.target);
                 const percentage = targetValue
                   ? (actualValue / targetValue) * 100
-                  : 0; // use numeric value here for comparison
+                  : 0;
 
                 let style = {
                   padding: "4px 8px",
-                   borderRadius: "12px",
+                  borderRadius: "12px",
                   display: "inline-block",
-                  width: "50px", // fixed width for all badges
+                  width: "50px",
                   textAlign: "center",
                 };
 
@@ -282,13 +278,13 @@ export default function ScoreCardAmendment() {
             ></Column>
             <Column
               field="weightagePercentage"
-              header="Weightage %"
+              header="Weigh %"
               sortable
               style={{ width: "25%" }}
             ></Column>
             <Column
               field="weightagePref"
-              header="Weightage Pref"
+              header="Weigh Pref"
               sortable
               style={{ width: "25%" }}
             ></Column>
@@ -302,7 +298,6 @@ export default function ScoreCardAmendment() {
                     justifyContent: "center",
                   }}
                 >
-                  {/* 👁 View Button */}
                   <Button
                     icon="pi pi-eye"
                     className="p-button-white p-button-xs bg-white small-icon-button"
@@ -344,6 +339,15 @@ export default function ScoreCardAmendment() {
         onHide={() => setVisible(false)}
         rowData={currentRow}
         onSave={(updatedRow) => {
+          const savedData = localStorage.getItem("scoreCardData");
+          const allProducts = savedData ? JSON.parse(savedData) : [];
+          const updatedProducts = allProducts.map((p) =>
+            p.id === currentRow.id ? { ...p, ...updatedRow } : p
+          );
+          localStorage.setItem(
+            "scoreCardData",
+            JSON.stringify(updatedProducts)
+          );
           setProducts((prev) =>
             prev.map((p) =>
               p.id === currentRow.id ? { ...p, ...updatedRow } : p

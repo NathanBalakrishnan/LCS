@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import BulkReset from "../../Mocks/BulkReset.js";
 import "../../Style/Common.css";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import DialogForm from "../Common/DailogForm.js";
 import MonthScorePicker from "../Common/DateComponent.js";
+import monthScores from "../../Mocks/MonthMock.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
   const [readOnly, setReadOnly] = useState(false);
@@ -22,7 +22,7 @@ export default function ScoreCardAmendment() {
       const parsedData = JSON.parse(savedData);
 
       const filteredData = date
-        ? parsedData.filter((data) => data.date === date)
+        ? parsedData.filter((data) => data.date === date )
         : parsedData;
 
       console.log("filteredData", filteredData);
@@ -32,21 +32,6 @@ export default function ScoreCardAmendment() {
   const [currentRow, setCurrentRow] = useState(null);
   const managingPoints = products.filter((p) => p.type === "Managing Point");
   const checkingPoints = products.filter((p) => p.type === "Checking Point");
-  const monthScores = {
-    "2025-01": { score: 90, tag: "ME" },
-    "2025-02": { score: 85 },
-    "2025-03": { score: 98, tag: "MSE" },
-    "2025-04": { score: 95 },
-    "2025-05": { score: 90 },
-    "2025-06": { score: 85 },
-    "2025-07": { score: 65, tag: "ME" },
-    "2025-08": { score: 95 },
-    "2025-09": { score: 88 },
-    "2025-10": { score: 85 },
-    "2025-11": { score: 55, tag: "BE" },
-    "2025-12": { score: 95 },
-  };
-  const [selectedMonth, setSelectedMonth] = useState("");
   const [showGrid, setShowGrid] = useState(false);
   const JobTitle = [
     { name: "FrontEnd Developer", code: "FrontEnd Developer" },
@@ -57,13 +42,6 @@ export default function ScoreCardAmendment() {
     { name: "Managing Point", code: "Managing Point" },
     { name: "Checking Point", code: "Checking Point" },
   ];
-  let style = {
-    display: "inline-block",
-    width: "60px",
-    textAlign: "center",
-    padding: "4px",
-    borderRadius: "15px",
-  };
   const formatMonth = (value) => {
     const date = new Date(value + "-01");
     return date.toLocaleString("en-US", { month: "short", year: "numeric" });
@@ -91,28 +69,30 @@ export default function ScoreCardAmendment() {
         value={data}
         tableStyle={{ minWidth: "50rem" }}
         className="dataTable"
+        paginator 
+        rows={3}
       >
         <Column
           field="id"
-          header="Object Id"
+          header="Obj-Id"
           sortable
           style={{ width: "8%" }}
         />
-        <Column field="accountability" header="Accountability" sortable />
+        <Column field="accountability" header="Account" sortable />
         <Column
           field="measureDescription"
-          header="Measure Description"
+          header="Des"
           sortable
         />
         <Column field="uom" header="UOM" sortable />
         <Column field="scenario" header="Scenario" sortable />
-        <Column field="jobAssignment" header="Job Assignment" sortable />
+        <Column field="jobAssignment" header="Job Assign" sortable />
         <Column field="periodicity" header="Periodicity" sortable />
         <Column field="target" header="Target" sortable />
         <Column field="actual" header="Actual" sortable />
         <Column
           field="perfScore"
-          header="Perf.Score"
+          header="Perf.Scr"
           sortable
           style={{ width: "25%" }}
           body={(rowData) => {
@@ -172,8 +152,8 @@ export default function ScoreCardAmendment() {
             }
           }}
         ></Column>
-        <Column field="weightagePercentage" header="Weightage %" sortable />
-        <Column field="weightagePref" header="Weightage Pref" sortable />
+        <Column field="weightagePercentage" header="Weigh %" sortable />
+        <Column field="weightagePref" header="Weigh Pref" sortable />
         <Column
           header="Actions"
           body={(rowData) => (
@@ -314,7 +294,16 @@ export default function ScoreCardAmendment() {
         readonly={readOnly}
         onHide={() => setVisible(false)}
         rowData={currentRow}
-        onSave={(updatedRow) => {
+         onSave={(updatedRow) => {
+          const savedData = localStorage.getItem("scoreCardData");
+          const allProducts = savedData ? JSON.parse(savedData) : [];
+          const updatedProducts = allProducts.map((p) =>
+            p.id === currentRow.id ? { ...p, ...updatedRow } : p
+          );
+          localStorage.setItem(
+            "scoreCardData",
+            JSON.stringify(updatedProducts)
+          );
           setProducts((prev) =>
             prev.map((p) =>
               p.id === currentRow.id ? { ...p, ...updatedRow } : p

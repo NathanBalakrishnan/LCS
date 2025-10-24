@@ -11,7 +11,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
 
   const handleSelectMonth = (key) => {
     setSelectedMonth(key);
-    setShowGrid(false); // hide grid after selecting
+    setShowGrid(false);
     if (onMonthSelect) {
       onMonthSelect(key);
     }
