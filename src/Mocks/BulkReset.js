@@ -1,0 +1,86 @@
+
+const BulkReset = [
+  {
+    id: '124',
+    accountability: 'BG',
+    measureDescription: 'Reduce Ticket Closure',
+    uom: '20%',
+    type:"Checking Point",
+    scenario: '2',
+    jobAssignment:"Job-Emp-001",
+    periodicity: 'Monthly',
+    target: 100,
+    actual: 80,
+    perfScore: "80%",
+    perfRating:"MSE",
+    weightagePercentage:"50%",
+    weightagePref:"20%"
+  },
+    {
+    id: '121',
+    accountability: 'BG',
+    measureDescription: 'Reduce Ticket Closure',
+    uom: '20%',
+    type:"Checking Point",
+    scenario: '2',
+    jobAssignment:"Job-Emp-001",
+    periodicity: 'Monthly',
+    target: 100,
+    actual: 100,
+    perfScore: "100%",
+    perfRating:"ME",
+    weightagePercentage:"50%",
+    weightagePref:"20%"
+  },
+    {
+    id: '128',
+    accountability: 'BG',
+    measureDescription: 'Reduce Ticket Closure',
+    uom: '20%',
+    scenario: '2',
+    type:"Checking Point",
+    jobAssignment:"Job-Emp-001",
+    periodicity: 'Monthly',
+    target: 100,
+    actual: 84,
+    perfScore: "80%",
+    perfRating:"MSE",
+    weightagePercentage:"50%",
+    weightagePref:"20%"
+  },
+    {
+    id: '122',
+    accountability: 'BG',
+    measureDescription: 'Reduce Ticket Closure',
+    uom: '20%',
+    scenario: '2',
+    type:"Checking Point",
+    jobAssignment:"Job-Emp-001",
+    periodicity: 'Monthly',
+    target: 100,
+    actual: 80,
+    perfScore: "80%",
+    perfRating:"MSE",
+    weightagePercentage:"50%",
+    weightagePref:"20%"
+  },
+    {
+    id: '129',
+    accountability: 'BG',
+    measureDescription: 'Reduce Ticket Closure',
+    uom: '20%',
+    scenario: '2',
+    type:"Managing Point",
+    jobAssignment:"Job-Emp-001",
+    periodicity: 'Monthly',
+    target: 80,
+    actual: 55,
+    perfScore: "80%",
+    perfRating:"BE",
+    weightagePercentage:"50%",
+    weightagePref:"20%"
+  },
+   
+]
+
+export default BulkReset;

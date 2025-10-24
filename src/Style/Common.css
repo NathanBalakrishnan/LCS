@@ -1,0 +1,59 @@
+/* Target the tab header specifically */
+.score-tab .p-tabview-title {
+    color: #008B8B;
+    font-weight: 600;
+    font-size: 18px;
+}
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link{
+   background: #ffffff;
+   border-color:#008B8B;
+   border-bottom: 4px solid #008B8B;
+}
+.dataTable{
+    font-size: 12px;
+}
+.custom-dropdown .p-dropdown {
+  border-radius: 12px !important;
+  max-width: 90%;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: black; /* other links in black */
+  margin-right: 5px;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb .separator {
+  margin: 0 5px;
+  color: #6c757d; /* gray for separator */
+}
+
+.breadcrumb .current {
+  font-weight: bold;
+  color: rgb(49, 171, 242); /* current page in blue */
+}
+.gridStyle {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 400px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999; /* ensures it's on top */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
