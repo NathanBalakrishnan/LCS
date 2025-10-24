@@ -15,8 +15,8 @@ export default function ScoreCardAmendment() {
   const totalTarget = products.reduce((val, item) => val + item.target, 0);
   const totalActual = products.reduce((val, item) => val + item.actual, 0);
   let averagePercentage = totalTarget
-  ? Math.round((totalActual / totalTarget) * 100)
-  : 0;
+    ? Math.round((totalActual / totalTarget) * 100)
+    : 0;
   averagePercentage = averagePercentage > 100 ? 100 : averagePercentage;
 
   const [jobName, setJobName] = useState(null);
@@ -67,7 +67,12 @@ export default function ScoreCardAmendment() {
   return (
     <>
       <div className="card">
-        <Card>
+        <Card
+          style={{
+            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+          }}
+        >
           <div
             style={{
               textAlign: "left",
@@ -99,7 +104,7 @@ export default function ScoreCardAmendment() {
                 opacity: jobName ? 1 : 0.5,
                 pointerEvents: jobName ? "auto" : "none",
               }}
-              >
+            >
               <MonthScorePicker
                 monthScores={monthScores}
                 formatMonth={formatMonth}
@@ -108,7 +113,13 @@ export default function ScoreCardAmendment() {
             </div>
           </div>
         </Card>
-        <Card style={{ marginTop: "12px" }}>
+        <Card
+          style={{
+            marginTop: "20px",
+            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -157,7 +168,7 @@ export default function ScoreCardAmendment() {
             value={products}
             tableStyle={{ minWidth: "50rem" }}
             className="dataTable"
-            paginator 
+            paginator
             rows={3}
           >
             <Column

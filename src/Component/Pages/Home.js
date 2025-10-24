@@ -36,7 +36,7 @@ export default function Home() {
       </div>
       <TabView>
         <TabPanel header="Score Amendment" className="score-tab">
-          <ScoreCardAmendment />
+          <ScoreCardAmendment/>
         </TabPanel>
         <TabPanel header="Bulk Reset" className="score-tab">
           <BulkReset />

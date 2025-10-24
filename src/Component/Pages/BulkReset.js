@@ -22,7 +22,7 @@ export default function ScoreCardAmendment() {
       const parsedData = JSON.parse(savedData);
 
       const filteredData = date
-        ? parsedData.filter((data) => data.date === date )
+        ? parsedData.filter((data) => data.date === date)
         : parsedData;
 
       console.log("filteredData", filteredData);
@@ -69,21 +69,12 @@ export default function ScoreCardAmendment() {
         value={data}
         tableStyle={{ minWidth: "50rem" }}
         className="dataTable"
-        paginator 
+        paginator
         rows={3}
       >
-        <Column
-          field="id"
-          header="Obj-Id"
-          sortable
-          style={{ width: "8%" }}
-        />
+        <Column field="id" header="Obj-Id" sortable style={{ width: "8%" }} />
         <Column field="accountability" header="Account" sortable />
-        <Column
-          field="measureDescription"
-          header="Des"
-          sortable
-        />
+        <Column field="measureDescription" header="Des" sortable />
         <Column field="uom" header="UOM" sortable />
         <Column field="scenario" header="Scenario" sortable />
         <Column field="jobAssignment" header="Job Assign" sortable />
@@ -202,7 +193,12 @@ export default function ScoreCardAmendment() {
   return (
     <>
       <div className="card">
-        <Card>
+        <Card
+          style={{
+            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+          }}
+        >
           <div
             style={{
               textAlign: "left",
@@ -260,7 +256,7 @@ export default function ScoreCardAmendment() {
                   onChange={(e) => setGoal(e.value)}
                   options={goalList}
                   optionLabel="name"
-                  placeholder="Select a job"
+                  placeholder="Select a Goal"
                   className="w-full md:w-14rem custom-dropdown"
                   style={{ minWidth: "250px" }}
                 />
@@ -268,7 +264,13 @@ export default function ScoreCardAmendment() {
             </div>
           </div>
         </Card>
-        <Card style={{ marginTop: "8px" }}>
+        <Card
+          style={{
+            marginTop: "18px",
+            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -294,7 +296,7 @@ export default function ScoreCardAmendment() {
         readonly={readOnly}
         onHide={() => setVisible(false)}
         rowData={currentRow}
-         onSave={(updatedRow) => {
+        onSave={(updatedRow) => {
           const savedData = localStorage.getItem("scoreCardData");
           const allProducts = savedData ? JSON.parse(savedData) : [];
           const updatedProducts = allProducts.map((p) =>
