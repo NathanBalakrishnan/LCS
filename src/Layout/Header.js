@@ -9,7 +9,7 @@ const Header = () => {
     <header className="app-header">
       <div className="header-content">
         <div className="logo-section">
-          <h2 className="app-title">RVL</h2>
+          <h2 className="app-title">LCS</h2>
         </div>
       </div>
     </header>

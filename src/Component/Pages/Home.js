@@ -18,27 +18,24 @@ export default function Home() {
   }, []);
   return (
     <div className="card" style={{ margin: "12px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h3 className="title">Score Card Amendment</h3>
+        <nav className="breadcrumb">
+          <a href="#">Home</a>
+          <span className="separator">/</span>
+          <a href="#">Dashboard</a>
+          <span className="separator">/</span>
+          <span className="current">Settings</span>
+        </nav>
+      </div>
       <TabView>
         <TabPanel header="Score Amendment" className="score-tab">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "12px",
-            }}
-          >
-            <h3 style={{ margin: 0, fontWeight: "800" }}>
-              Score Card Amendment
-            </h3>
-            <nav className="breadcrumb">
-              <a href="#">Home</a>
-              <span className="separator">/</span>
-              <a href="#">Dashboard</a>
-              <span className="separator">/</span>
-              <span className="current">Settings</span>
-            </nav>
-          </div>
           <ScoreCardAmendment />
         </TabPanel>
         <TabPanel header="Bulk Reset" className="score-tab">

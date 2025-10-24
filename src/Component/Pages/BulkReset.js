@@ -11,34 +11,39 @@ import MonthScorePicker from "../Common/DateComponent.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
   const [readOnly, setReadOnly] = useState(false);
-useEffect(() => {
-  // Try to get data from localStorage
-  const savedData = localStorage.getItem("bulkResetData");
-  if (savedData) {
-    setProducts(JSON.parse(savedData));
-    console.log("Loaded from localStorage:", JSON.parse(savedData));
-  }
-}, []);
 
   const [jobName, setJobName] = useState(null);
   const [goal, setGoal] = useState(null);
   const [visible, setVisible] = useState(false);
   const [date, setDate] = useState(null);
+  useEffect(() => {
+    const savedData = localStorage.getItem("bulkResetData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+
+      const filteredData = date
+        ? parsedData.filter((data) => data.date === date)
+        : parsedData;
+
+      console.log("filteredData", filteredData);
+      setProducts(filteredData);
+    }
+  }, [date]);
   const [currentRow, setCurrentRow] = useState(null);
   const managingPoints = products.filter((p) => p.type === "Managing Point");
   const checkingPoints = products.filter((p) => p.type === "Checking Point");
   const monthScores = {
     "2025-01": { score: 90, tag: "ME" },
     "2025-02": { score: 85 },
-    "2025-03": { score: 98 },
+    "2025-03": { score: 98, tag: "MSE" },
     "2025-04": { score: 95 },
     "2025-05": { score: 90 },
     "2025-06": { score: 85 },
-    "2025-07": { score: 65, tag: "MSE" },
+    "2025-07": { score: 65, tag: "ME" },
     "2025-08": { score: 95 },
     "2025-09": { score: 88 },
     "2025-10": { score: 85 },
-    "2025-11": { score: 60 ,tag: "BE" },
+    "2025-11": { score: 55, tag: "BE" },
     "2025-12": { score: 95 },
   };
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -62,6 +67,9 @@ useEffect(() => {
   const formatMonth = (value) => {
     const date = new Date(value + "-01");
     return date.toLocaleString("en-US", { month: "short", year: "numeric" });
+  };
+  const handleMonthSelect = (selectedMonth) => {
+    setDate(selectedMonth);
   };
   const handleMonthClick = () => {
     // Toggle your custom grid when clicking input
@@ -102,38 +110,68 @@ useEffect(() => {
         <Column field="periodicity" header="Periodicity" sortable />
         <Column field="target" header="Target" sortable />
         <Column field="actual" header="Actual" sortable />
-        <Column field="perfScore" header="Perf. Score" sortable />
+        <Column
+          field="perfScore"
+          header="Perf.Score"
+          sortable
+          style={{ width: "25%" }}
+          body={(rowData) => {
+            const value = rowData.actual;
+            const actualValue = rowData.target;
+            const percentage = value
+              ? ((value / actualValue) * 100).toFixed(0)
+              : 0;
+
+            return <span>{percentage}%</span>;
+          }}
+        ></Column>
         <Column
           field="perfRating"
-          header="Perf. Rating"
+          header="Perf.Rating"
+          sortable
+          style={{ width: "25%" }}
           body={(rowData) => {
-            const value = rowData.perfRating;
-            const actualValue = rowData.actual;
-            if (actualValue >= 85 && actualValue <= 100) {
+            const actualValue = Number(rowData.actual);
+            const targetValue = Number(rowData.target);
+            const percentage = targetValue
+              ? (actualValue / targetValue) * 100
+              : 0; // use numeric value here for comparison
+
+            let style = {
+              padding: "4px 8px",
+              borderRadius: "12px",
+              display: "inline-block",
+              width: "50px", // fixed width for all badges
+              textAlign: "center",
+            };
+
+            if (percentage >= 85 && percentage <= 100) {
               style = {
                 ...style,
                 backgroundColor: "#efb326ff",
                 color: "white",
                 fontWeight: 600,
               };
-            } else if (actualValue >= 60 && actualValue < 85) {
+              return <span style={style}>ME</span>;
+            } else if (percentage >= 60 && percentage < 85) {
               style = {
                 ...style,
                 backgroundColor: "#4caf50",
                 color: "white",
                 fontWeight: 600,
               };
-            } else if (actualValue < 60) {
+              return <span style={style}>MSE</span>;
+            } else if (percentage < 60) {
               style = {
                 ...style,
                 backgroundColor: "#2196f3",
                 color: "white",
                 fontWeight: 600,
-              }; // Blue
+              };
+              return <span style={style}>BE</span>;
             }
-            return <span style={style}>{value}</span>;
           }}
-        />
+        ></Column>
         <Column field="weightagePercentage" header="Weightage %" sortable />
         <Column field="weightagePref" header="Weightage Pref" sortable />
         <Column
@@ -208,13 +246,21 @@ useEffect(() => {
                 optionLabel="name"
                 placeholder="Select a job"
                 className="w-full md:w-14rem custom-dropdown"
-                style={{ maxWidth: "500px" }}
+                style={{ minWidth: "250px" }}
               />
             </div>
-            <MonthScorePicker
-              monthScores={monthScores}
-              formatMonth={formatMonth}
-            />
+            <div
+              style={{
+                opacity: jobName ? 1 : 0.5,
+                pointerEvents: jobName ? "auto" : "none",
+              }}
+            >
+              <MonthScorePicker
+                monthScores={monthScores}
+                formatMonth={formatMonth}
+                onMonthSelect={handleMonthSelect}
+              />
+            </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <label
                 htmlFor="jobDropdown"
@@ -222,16 +268,23 @@ useEffect(() => {
               >
                 Goal Objective ID
               </label>
-              <Dropdown
-                id="jobDropdown"
-                value={goal}
-                onChange={(e) => setGoal(e.value)}
-                options={goalList}
-                optionLabel="name"
-                placeholder="Select a job"
-                className="w-full md:w-14rem custom-dropdown"
-                style={{ maxWidth: "500px" }}
-              />
+              <div
+                style={{
+                  opacity: date ? 1 : 0.5,
+                  pointerEvents: date ? "auto" : "none",
+                }}
+              >
+                <Dropdown
+                  id="jobDropdown"
+                  value={goal}
+                  onChange={(e) => setGoal(e.value)}
+                  options={goalList}
+                  optionLabel="name"
+                  placeholder="Select a job"
+                  className="w-full md:w-14rem custom-dropdown"
+                  style={{ minWidth: "250px" }}
+                />
+              </div>
             </div>
           </div>
         </Card>
@@ -249,7 +302,8 @@ useEffect(() => {
               (goal?.code === undefined || goal?.code === "Managing Point") &&
               renderTable("Managing Points", managingPoints)}
             {checkingPoints.length > 0 &&
-              (goal?.code === "Managing Point" || goal?.code === undefined ||
+              (goal?.code === "Managing Point" ||
+                goal?.code === undefined ||
                 goal?.code === "Checking Point") &&
               renderTable("Checking Points", checkingPoints)}
           </div>

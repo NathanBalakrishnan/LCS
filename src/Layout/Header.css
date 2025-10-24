@@ -1,5 +1,5 @@
 .app-header {
-  background-color: #4d8fe6;
+  background-color: #008B8B;
   color: white;
   display: flex;
   justify-content: center;
@@ -27,6 +27,7 @@
 .app-title {
   font-size: 1.5rem;
   font-weight: 600;
+  padding-left: 12px;
 }
 
 .nav-links {

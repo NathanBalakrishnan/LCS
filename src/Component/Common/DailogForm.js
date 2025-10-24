@@ -6,14 +6,14 @@ import { useFormik } from "formik";
 import { scoreCardSchema } from "./ValidationSchema";
 
 export default function DialogForm({ visible,readonly, onHide, rowData, onSave }) {
-  console.log("readonly",readonly)
+  console.log("readonly",rowData)
   const formik = useFormik({
     initialValues: {
       actual: "",
       measureDescription: "",
       periodicity: "",
     },
-    validationSchema: scoreCardSchema,
+    validationSchema: readonly?"":scoreCardSchema(rowData?.target),
     onSubmit: (values) => {
       if (onSave) onSave(values);
       onHide();
@@ -28,7 +28,7 @@ export default function DialogForm({ visible,readonly, onHide, rowData, onSave }
         periodicity: rowData.periodicity || "",
       });
     }
-  }, [rowData]);
+  }, [rowData,visible]);
 
   const onClear = () => {
     formik.resetForm();

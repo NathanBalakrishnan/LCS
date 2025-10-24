@@ -35,12 +35,11 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     fontSize: "12px",
     fontWeight: 500,
     borderRadius: "999px",
-    backgroundColor:
-      tag === "ME" ? "#008B8B" : tag === "MSE" ? "orange" : "#2196f3",
+    backgroundColor:tag === "ME" ? "#008B8B" : tag === "MSE" ? "orange" : "#2196f3",
     color: "white",
     position: "absolute", // position it over the card
     bottom: "-8px", // moves it above the border
-    right: "20px", // adjust horizontal position
+    right: "40px", // adjust horizontal position
     padding: "2px 8px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
   });
@@ -66,7 +65,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     position: "absolute",
     top: "100%",
     left: 0,
-    width: "330px",
+    width: "422px",
     backgroundColor: "#fff",
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -83,7 +82,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between", // ensures vertical spacing
-    width: "80px", // fixed width for consistency
+    width: "100%",
     minHeight: "80px", // optional: ensures equal height
     boxSizing: "border-box",
     borderRadius: "18px",
@@ -134,7 +133,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
                 >
                   <span
                     style={{
-                      backgroundColor: score < 90 ? "orange" : "#008B8B",
+                      backgroundColor: score >= 90 ? "#008B8B": score <60?"#2196f3" : "orange",
                       color: "white",
                       width: "100%",
                       textAlign: "center",
@@ -152,7 +151,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
                       paddingBottom: "18px",
                       fontSize: "20px",
                       fontWeight: 700,
-                      color: "#0f766e",
+                      color: score >= 90 ? "#008B8B": score <60?"#2196f3" : "orange",
                     }}
                   >
                     {score}%

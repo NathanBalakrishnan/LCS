@@ -18,7 +18,7 @@ function App() {
   return (
   <PrimeReactProvider value={primeConfig}>
     <Router>
-        <div className="App">
+        <div className="App" style={{background:"#ebf9f9ff"}}>
           <Header/>
           {/* Define Routes */}
           <Routes>
