@@ -38,9 +38,9 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     backgroundColor:tag === "ME" ? "#008B8B" : tag === "MSE" ? "orange" : "#2196f3",
     color: "white",
     borderColor:"#008B8B",
-    position: "absolute", // position it over the card
-    bottom: "-8px", // moves it above the border
-    right: "40px", // adjust horizontal position
+    position: "absolute",
+    bottom: "-8px", 
+    right: "40px", 
     padding: "2px 8px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
   });
@@ -58,7 +58,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     border: "1px solid #ccc",
     marginBottom: "8px",
     fontSize: "14px",
-    marginTop: "0px", // change from 14px to 0 to balance with label
+    marginTop: "0px",
     color: "#333",
   };
 
@@ -83,9 +83,9 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between", // ensures vertical spacing
+    justifyContent: "space-between",
     width: "100%",
-    minHeight: "80px", // optional: ensures equal height
+    minHeight: "80px",
     boxSizing: "border-box",
     borderRadius: "18px",
     border: "1px solid  #14b8a6",

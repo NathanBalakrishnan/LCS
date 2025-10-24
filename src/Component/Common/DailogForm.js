@@ -6,7 +6,6 @@ import { useFormik } from "formik";
 import { scoreCardSchema } from "./ValidationSchema";
 
 export default function DialogForm({ visible,readonly, onHide, rowData, onSave }) {
-  console.log("readonly",rowData)
   const formik = useFormik({
     initialValues: {
       actual: "",
@@ -18,7 +17,7 @@ export default function DialogForm({ visible,readonly, onHide, rowData, onSave }
       if (onSave) onSave(values);
       onHide();
     },
-    enableReinitialize: true, // allow updates when rowData changes
+    enableReinitialize: true,
   });
   useEffect(() => {
     if (rowData) {
@@ -70,7 +69,6 @@ export default function DialogForm({ visible,readonly, onHide, rowData, onSave }
       }
     >
       <form onSubmit={formik.handleSubmit}>
-        {/* Achieved Value */}
         <div
           style={{
             display: "flex",
@@ -97,8 +95,6 @@ export default function DialogForm({ visible,readonly, onHide, rowData, onSave }
             <span style={{ color: "red" }}>{formik.errors.actual}</span>
           )}
         </div>
-
-        {/* Notes */}
         <div
           style={{
             display: "flex",
@@ -129,8 +125,6 @@ export default function DialogForm({ visible,readonly, onHide, rowData, onSave }
               </span>
             )}
         </div>
-
-        {/* Action Plan */}
         <div
           style={{
             display: "flex",

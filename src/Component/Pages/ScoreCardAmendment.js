@@ -11,6 +11,7 @@ import { formatMonthString } from "../Utils/Utilityfunction.js";
 import monthScores from "../../Mocks/MonthMock.js";
 import { ProgressSpinner } from "primereact/progressspinner";
 import CommonDataTable from "../Common/TableComponent.js";
+import { formatMonth } from "../Utils/Utilityfunction.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
   const [jobName, setJobName] = useState(null);
@@ -123,10 +124,7 @@ export default function ScoreCardAmendment() {
     },
   ];
 
-  const formatMonth = (value) => {
-    const date = new Date(value + "-01");
-    return date.toLocaleString("en-US", { month: "short" });
-  };
+
   let style = {
     display: "inline-block",
     width: "60px",

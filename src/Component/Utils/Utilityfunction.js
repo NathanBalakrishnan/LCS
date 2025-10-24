@@ -7,3 +7,8 @@ export const formatMonthString = (monthStr) => {
   
   return `${monthName}-${year}`;
 };
+
+ export const formatMonth = (value) => {
+    const date = new Date(value + "-01");
+    return date.toLocaleString("en-US", { month: "short" });
+  };

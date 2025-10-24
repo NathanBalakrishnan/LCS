@@ -10,6 +10,7 @@ import MonthScorePicker from "../Common/DateComponent.js";
 import monthScores from "../../Mocks/MonthMock.js";
 import { ProgressSpinner } from "primereact/progressspinner";
 import CommonDataTable from "../Common/TableComponent.js";
+import { formatMonth } from "../Utils/Utilityfunction.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
   const [readOnly, setReadOnly] = useState(false);
@@ -115,7 +116,7 @@ export default function ScoreCardAmendment() {
         ? parsedData.filter((data) => data.date === date)
         : parsedData;
 
-      setFilteredProducts(filteredData); // <-- use filteredProducts only for table
+      setFilteredProducts(filteredData); 
     } else {
       setFilteredProducts([]);
     }
@@ -139,10 +140,6 @@ export default function ScoreCardAmendment() {
     { name: "Managing Point", code: "Managing Point" },
     { name: "Checking Point", code: "Checking Point" },
   ];
-  const formatMonth = (value) => {
-    const date = new Date(value + "-01");
-    return date.toLocaleString("en-US", { month: "short", year: "numeric" });
-  };
   const handleMonthSelect = (selectedMonth) => {
     setDate(selectedMonth);
   };
@@ -252,7 +249,7 @@ export default function ScoreCardAmendment() {
               <Button
                 onClick={async () => {
                   setLoading(true);
-                  await new Promise((resolve) => setTimeout(resolve, 800)); // small delay for UX
+                  await new Promise((resolve) => setTimeout(resolve, 800));
                   handleLoadData();
 
                   setLoading(false);
@@ -288,70 +285,6 @@ export default function ScoreCardAmendment() {
             </div>
           </div>
         </Card>
-        {/* <Card
-          style={{
-            marginTop: "18px",
-            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "12px",
-            }}
-          ></div>
-          <div>
-            {dataLoaded &&
-              managingPoints.length > 0 &&
-              (goal?.code === undefined || goal?.code === "Managing Point") &&
-              renderTable("Managing Points", managingPoints)}
-            {dataLoaded &&
-              checkingPoints.length > 0 &&
-              (goal?.code === "Managing Point" ||
-                goal?.code === undefined ||
-                goal?.code === "Checking Point") &&
-              renderTable("Checking Points", checkingPoints)}
-          </div>
-        </Card> */}
-        {/* <Card
-          style={{
-            marginTop: "18px",
-            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "12px",
-            }}
-          ></div>
-          <div>
-            {dataLoaded &&
-              managingPoints.length > 0 &&
-              (goal?.code === undefined || goal?.code === "Managing Point") &&
-              renderTable("Managing Points", managingPoints)}
-            <Card
-              style={{
-                marginLeft: "15px",
-                marginRight: "15px",
-                background: "#ebf9f9ff",
-              }}
-            >
-              {dataLoaded &&
-                checkingPoints.length > 0 &&
-                (goal?.code === "Managing Point" ||
-                  goal?.code === undefined ||
-                  goal?.code === "Checking Point") &&
-                renderTable("Checking Points", checkingPoints)}
-            </Card>
-          </div>
-        </Card> */}
         <Card style={{ marginTop: "18px", boxShadow: "1px 2px 5px 2px rgba(0,0,0,0.1)", borderRadius: "8px" }}>
           {dataLoaded && managingPoints.length > 0 && (goal?.code === undefined || goal?.code === "Managing Point") && renderTable("Managing Points", managingPoints)}
 

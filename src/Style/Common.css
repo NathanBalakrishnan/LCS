@@ -13,11 +13,11 @@
    background: #ebf9f9ff !important;
 }
 .p-tabview .p-tabview-panels {
-    background: #ebf9f9ff !important; /* content area background */
+    background: #ebf9f9ff !important; 
 }
 .p-tabview .p-tabview-nav {
-    background: #ebf9f9ff !important; /* full white for tab header area */
-    border-bottom: 1px solid #ccc; /* optional: subtle border */
+    background: #ebf9f9ff !important;
+    border-bottom: 1px solid #ccc;
 }
 .dataTable{
     font-size: 12px;
@@ -35,7 +35,7 @@
 
 .breadcrumb a {
   text-decoration: none;
-  color: black; /* other links in black */
+  color: black;
   margin-right: 5px;
 }
 
@@ -45,12 +45,12 @@
 
 .breadcrumb .separator {
   margin: 0 5px;
-  color: #6c757d; /* gray for separator */
+  color: #6c757d; 
 }
 
 .breadcrumb .current {
   font-weight: bold;
-  color: rgb(49, 171, 242); /* current page in blue */
+  color: rgb(49, 171, 242); 
 }
 .gridStyle {
   position: absolute;
@@ -62,7 +62,7 @@
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  z-index: 9999; /* ensures it's on top */
+  z-index: 9999;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
