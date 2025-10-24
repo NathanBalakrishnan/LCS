@@ -37,6 +37,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     borderRadius: "999px",
     backgroundColor:tag === "ME" ? "#008B8B" : tag === "MSE" ? "orange" : "#2196f3",
     color: "white",
+    borderColor:"#008B8B",
     position: "absolute", // position it over the card
     bottom: "-8px", // moves it above the border
     right: "40px", // adjust horizontal position
@@ -69,6 +70,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     backgroundColor: "#fff",
     border: "1px solid #ccc",
     borderRadius: "8px",
+    borderColor:"#008B8B",
     padding: "20px",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
     zIndex: 9999,
@@ -86,8 +88,8 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
     minHeight: "80px", // optional: ensures equal height
     boxSizing: "border-box",
     borderRadius: "18px",
-    border: `2px solid ${isSelected ? "#14b8a6" : "#ccc"}`,
-    backgroundColor: isSelected ? "#f0fdfa" : "#fff",
+    border: "1px solid  #14b8a6",
+    backgroundColor: isSelected ? "#f0fdfa" : "#ebf9f9ff",
     cursor: "pointer",
     transition: "border 0.2s ease",
     position: "relative",
@@ -137,6 +139,7 @@ const MonthScorePicker = ({ monthScores, formatMonth, onMonthSelect }) => {
                       color: "white",
                       width: "100%",
                       textAlign: "center",
+                      borderColor:"#008B8B",
                       padding: "6px 0",
                       borderRadius: "16px 16px 0 0",
                       fontSize: "14px",

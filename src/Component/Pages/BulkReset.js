@@ -8,14 +8,92 @@ import { Dropdown } from "primereact/dropdown";
 import DialogForm from "../Common/DailogForm.js";
 import MonthScorePicker from "../Common/DateComponent.js";
 import monthScores from "../../Mocks/MonthMock.js";
+import { ProgressSpinner } from "primereact/progressspinner";
+import CommonDataTable from "../Common/TableComponent.js";
 export default function ScoreCardAmendment() {
   const [products, setProducts] = useState([]);
   const [readOnly, setReadOnly] = useState(false);
-
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [jobName, setJobName] = useState(null);
   const [goal, setGoal] = useState(null);
   const [visible, setVisible] = useState(false);
   const [date, setDate] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [currentRow, setCurrentRow] = useState(null);
+    const columns = [
+    { field: "id", header: "Obj-Id", sortable: true, style: { width: "8%" } },
+    { field: "accountability", header: "Acc", sortable: true },
+    { field: "measureDescription", header: "Description", sortable: true },
+    { field: "uom", header: "UOM", sortable: true },
+    { field: "scenario", header: "Scenario", sortable: true },
+    { field: "jobAssignment", header: "Job Assign", sortable: true },
+    { field: "periodicity", header: "Period", sortable: true },
+    { field: "target", header: "Target", sortable: true },
+    { field: "actual", header: "Actual", sortable: true },
+    {
+      field: "perfScore",
+      header: "Perf.Scr",
+      sortable: true,
+      body: (rowData) => {
+        const value = rowData.actual;
+        const actualValue = rowData.target;
+        const percentage = value ? ((value / actualValue) * 100).toFixed(0) : 0;
+        return <span>{percentage}%</span>;
+      },
+    },
+    {
+      field: "perfRating",
+      header: "Perf.Rating",
+      sortable: true,
+      body: (rowData) => {
+        const actualValue = Number(rowData.actual);
+        const targetValue = Number(rowData.target);
+        const percentage = targetValue ? (actualValue / targetValue) * 100 : 0;
+
+        let style = {
+          padding: "4px 8px",
+          borderRadius: "12px",
+          display: "inline-block",
+          width: "50px",
+          textAlign: "center",
+        };
+
+        if (percentage >= 85 && percentage <= 100) {
+          style = {
+            ...style,
+            backgroundColor: "#efb326ff",
+            color: "white",
+            fontWeight: 600,
+          };
+          return <span style={style}>ME</span>;
+        } else if (percentage >= 60 && percentage < 85) {
+          style = {
+            ...style,
+            backgroundColor: "#4caf50",
+            color: "white",
+            fontWeight: 600,
+          };
+          return <span style={style}>MSE</span>;
+        } else if (percentage < 60) {
+          style = {
+            ...style,
+            backgroundColor: "#2196f3",
+            color: "white",
+            fontWeight: 600,
+          };
+          return <span style={style}>BE</span>;
+        }
+      },
+    },
+    { field: "weightagePercentage", header: "Weigh %", sortable: true },
+    { field: "weightagePref", header: "Weigh Pref", sortable: true },
+    {
+      type: "action",
+      header: "Actions",
+      style: { width: "20%", textAlign: "center" },
+    },
+  ];
   useEffect(() => {
     const savedData = localStorage.getItem("bulkResetData");
     if (savedData) {
@@ -29,9 +107,28 @@ export default function ScoreCardAmendment() {
       setProducts(filteredData);
     }
   }, [date]);
-  const [currentRow, setCurrentRow] = useState(null);
-  const managingPoints = products.filter((p) => p.type === "Managing Point");
-  const checkingPoints = products.filter((p) => p.type === "Checking Point");
+  const handleLoadData = () => {
+    const savedData = localStorage.getItem("bulkResetData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      const filteredData = date
+        ? parsedData.filter((data) => data.date === date)
+        : parsedData;
+
+      setFilteredProducts(filteredData); // <-- use filteredProducts only for table
+    } else {
+      setFilteredProducts([]);
+    }
+    setDataLoaded(true);
+  };
+
+  const managingPoints = filteredProducts.filter(
+    (p) => p.type === "Managing Point"
+  );
+ 
+  const checkingPoints = filteredProducts.filter(
+    (p) => p.type === "Checking Point"
+  );
   const [showGrid, setShowGrid] = useState(false);
   const JobTitle = [
     { name: "FrontEnd Developer", code: "FrontEnd Developer" },
@@ -55,143 +152,27 @@ export default function ScoreCardAmendment() {
   };
   const renderTable = (title, data) => (
     <>
-      <h5
-        style={{
-          margin: "20px 0",
-          fontWeight: "900",
-          textAlign: "left",
-          color: "#333",
-        }}
-      >
-        {title}
-      </h5>
-      <DataTable
-        value={data}
-        tableStyle={{ minWidth: "50rem" }}
-        className="dataTable"
-        paginator
-        rows={3}
-      >
-        <Column field="id" header="Obj-Id" sortable style={{ width: "8%" }} />
-        <Column field="accountability" header="Account" sortable />
-        <Column field="measureDescription" header="Des" sortable />
-        <Column field="uom" header="UOM" sortable />
-        <Column field="scenario" header="Scenario" sortable />
-        <Column field="jobAssignment" header="Job Assign" sortable />
-        <Column field="periodicity" header="Periodicity" sortable />
-        <Column field="target" header="Target" sortable />
-        <Column field="actual" header="Actual" sortable />
-        <Column
-          field="perfScore"
-          header="Perf.Scr"
-          sortable
-          style={{ width: "25%" }}
-          body={(rowData) => {
-            const value = rowData.actual;
-            const actualValue = rowData.target;
-            const percentage = value
-              ? ((value / actualValue) * 100).toFixed(0)
-              : 0;
-
-            return <span>{percentage}%</span>;
-          }}
-        ></Column>
-        <Column
-          field="perfRating"
-          header="Perf.Rating"
-          sortable
-          style={{ width: "25%" }}
-          body={(rowData) => {
-            const actualValue = Number(rowData.actual);
-            const targetValue = Number(rowData.target);
-            const percentage = targetValue
-              ? (actualValue / targetValue) * 100
-              : 0; // use numeric value here for comparison
-
-            let style = {
-              padding: "4px 8px",
-              borderRadius: "12px",
-              display: "inline-block",
-              width: "50px", // fixed width for all badges
-              textAlign: "center",
-            };
-
-            if (percentage >= 85 && percentage <= 100) {
-              style = {
-                ...style,
-                backgroundColor: "#efb326ff",
-                color: "white",
-                fontWeight: 600,
-              };
-              return <span style={style}>ME</span>;
-            } else if (percentage >= 60 && percentage < 85) {
-              style = {
-                ...style,
-                backgroundColor: "#4caf50",
-                color: "white",
-                fontWeight: 600,
-              };
-              return <span style={style}>MSE</span>;
-            } else if (percentage < 60) {
-              style = {
-                ...style,
-                backgroundColor: "#2196f3",
-                color: "white",
-                fontWeight: 600,
-              };
-              return <span style={style}>BE</span>;
-            }
-          }}
-        ></Column>
-        <Column field="weightagePercentage" header="Weigh %" sortable />
-        <Column field="weightagePref" header="Weigh Pref" sortable />
-        <Column
-          header="Actions"
-          body={(rowData) => (
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                icon="pi pi-eye"
-                className="p-button-white p-button-sm bg-white"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #61dafb",
-                  color: "#007ad9",
-                }}
-                onClick={() => {
-                  setCurrentRow(rowData);
-                  setReadOnly(true);
-                  setVisible(true);
-                }}
-              />
-              <Button
-                icon="pi pi-pencil"
-                className="p-button-white p-button-sm bg-white"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #61dafb",
-                  color: "#007ad9",
-                }}
-                onClick={() => {
-                  setCurrentRow(rowData);
-                  setReadOnly(false);
-                  setVisible(true);
-                }}
-              />
-            </div>
-          )}
-          style={{ width: "20%", textAlign: "center" }}
-        />
-      </DataTable>
+      <CommonDataTable
+            title={title}
+            data={data}
+            columns={columns}
+            onView={(row) => {
+              setCurrentRow(row);
+              setReadOnly(true);
+              setVisible(true);
+            }}
+            onEdit={(row) => {
+              setCurrentRow(row);
+              setReadOnly(false);
+              setVisible(true);
+            }}
+          />
     </>
   );
   return (
+  
     <>
+    { console.log("managingPoints",managingPoints)}
       <div className="card">
         <Card
           style={{
@@ -262,9 +243,52 @@ export default function ScoreCardAmendment() {
                 />
               </div>
             </div>
+            <div
+              style={{
+                opacity: jobName && date && goal ? 1 : 0.5,
+                pointerEvents: jobName && date && goal ? "auto" : "none",
+              }}
+            >
+              <Button
+                onClick={async () => {
+                  setLoading(true);
+                  await new Promise((resolve) => setTimeout(resolve, 800)); // small delay for UX
+                  handleLoadData();
+
+                  setLoading(false);
+                }}
+                disabled={loading}
+                style={{
+                  width: "100px",
+                  height: "46px",
+                  marginTop: "21px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#008B8B",
+                  border: "none",
+                  color: "white",
+                  fontWeight: 600,
+                }}
+              >
+                {loading ? (
+                  <ProgressSpinner
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                    }}
+                    strokeWidth="6"
+                    fill="transparent"
+                    animationDuration=".5s"
+                  />
+                ) : (
+                  "Load"
+                )}
+              </Button>
+            </div>
           </div>
         </Card>
-        <Card
+        {/* <Card
           style={{
             marginTop: "18px",
             boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
@@ -280,15 +304,60 @@ export default function ScoreCardAmendment() {
             }}
           ></div>
           <div>
-            {managingPoints.length > 0 &&
+            {dataLoaded &&
+              managingPoints.length > 0 &&
               (goal?.code === undefined || goal?.code === "Managing Point") &&
               renderTable("Managing Points", managingPoints)}
-            {checkingPoints.length > 0 &&
+            {dataLoaded &&
+              checkingPoints.length > 0 &&
               (goal?.code === "Managing Point" ||
                 goal?.code === undefined ||
                 goal?.code === "Checking Point") &&
               renderTable("Checking Points", checkingPoints)}
           </div>
+        </Card> */}
+        {/* <Card
+          style={{
+            marginTop: "18px",
+            boxShadow: "1px 1px 5px 2px rgba(0, 0, 0, 0.1)",
+            borderRadius: "8px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "12px",
+            }}
+          ></div>
+          <div>
+            {dataLoaded &&
+              managingPoints.length > 0 &&
+              (goal?.code === undefined || goal?.code === "Managing Point") &&
+              renderTable("Managing Points", managingPoints)}
+            <Card
+              style={{
+                marginLeft: "15px",
+                marginRight: "15px",
+                background: "#ebf9f9ff",
+              }}
+            >
+              {dataLoaded &&
+                checkingPoints.length > 0 &&
+                (goal?.code === "Managing Point" ||
+                  goal?.code === undefined ||
+                  goal?.code === "Checking Point") &&
+                renderTable("Checking Points", checkingPoints)}
+            </Card>
+          </div>
+        </Card> */}
+        <Card style={{ marginTop: "18px", boxShadow: "1px 2px 5px 2px rgba(0,0,0,0.1)", borderRadius: "8px" }}>
+          {dataLoaded && managingPoints.length > 0 && (goal?.code === undefined || goal?.code === "Managing Point") && renderTable("Managing Points", managingPoints)}
+
+          <Card style={{ margin: "12px", background: "#ebf9f9ff" }}>
+            {dataLoaded && checkingPoints.length > 0 && (goal?.code === "Managing Point" || goal?.code === undefined || goal?.code === "Checking Point") && renderTable("Checking Points", checkingPoints)}
+          </Card>
         </Card>
       </div>
       <DialogForm
